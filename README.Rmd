@@ -6,7 +6,7 @@ output:
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-```{r, echo = FALSE}
+```{r setup, echo=FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
@@ -29,17 +29,17 @@ The following functions are implemented:
 
 ### Installation
 
-```{r eval=FALSE}
+```{r installation, eval=FALSE}
 devtools::install_github("hrbrmstr/omdbapi")
 ```
 
-```{r echo=FALSE, message=FALSE, warning=FALSE, error=FALSE}
+```{r setwidth, echo=FALSE, message=FALSE, warning=FALSE, error=FALSE}
 options(width=80)
 ```
 
 ### Usage
 
-```{r}
+```{r usage}
 library(omdbapi)
 
 # current verison
@@ -59,7 +59,7 @@ find_by_title("Game of Thrones", type="series", season=1, episode=1)
 
 ### Test Results
 
-```{r}
+```{r test}
 library(omdbapi)
 library(testthat)
 

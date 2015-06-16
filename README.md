@@ -108,7 +108,7 @@ library(omdbapi)
 library(testthat)
 
 date()
-#> [1] "Tue Jun 16 14:11:39 2015"
+#> [1] "Tue Jun 16 14:25:17 2015"
 
 test_dir("tests/")
 #> basic functionality :
