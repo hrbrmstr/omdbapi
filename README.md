@@ -1,6 +1,4 @@
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-[![Build Status](https://travis-ci.org/hrbrmstr/omdbapi.svg)](https://travis-ci.org/hrbrmstr/omdbapi) ![Project Status: Concept - Minimal or no implementation has been done yet.](http://www.repostatus.org/badges/0.1.0/concept.svg)](<http://www.repostatus.org/#concept>) [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/omdbapi)](http://cran.r-project.org/web/packages/omdbapi) ![downloads](http://cranlogs.r-pkg.org/badges/grand-total/omdbapi)
-
 omdbapi is an R package wrapper for the [Open Movie Database API](http://www.omdbapi.com/)
 
 The following functions are implemented:
@@ -110,7 +108,7 @@ library(omdbapi)
 library(testthat)
 
 date()
-#> [1] "Tue Jun 16 14:02:44 2015"
+#> [1] "Tue Jun 16 14:11:39 2015"
 
 test_dir("tests/")
 #> basic functionality :
