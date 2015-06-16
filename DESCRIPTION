@@ -1,8 +1,13 @@
 Package: omdbapi
-Title: What the Package Does (one line, title case)
-Version: 0.0.0.9000
-Authors@R: "Bob Rudis <bob@rudis.net> [aut,cre]"
-Description: What the package does (one paragraph).
+Title: Tools to Access Movie, Television and Game Data from the 'Open Movie Database'
+Version: 0.1.0.9000
+Authors@R: c(person("Bob", "Rudis", email = "bob@rudis.net", role = c("aut", "cre")))
+Description: Provides API access to the 'Open Movie Database' which maintains metadata
+             about movies, games and television shows through a public API.
 Depends: R (>= 3.2.0)
 License: MIT + file LICENSE
 LazyData: true
+Suggests: testthat
+Imports: httr,
+         dplyr,
+         stringr
