@@ -5,12 +5,18 @@ The following functions are implemented:
 
 -   `find_by_id`: Retrieve OMDB info by IMDB ID search
 -   `find_by_title`: Retrieve OMDB info by title search
+-   `get_actors`: Get actors from an omdb object as a vector
+-   `get_countries`: Get countries from an omdb object as a vector
+-   `get_directors`: Get directors from an omdb object as a vector
+-   `get_genres`: Get genres from an omdb object as a vector
+-   `get_writers`: Get writers from an omdb object as a vector
 -   `print.omdb`: Print an omdb result
 -   `search_by_title`: Lightweight omdb title search
 
 ### News
 
 -   Version `0.1.0.9000` released
+-   Version `0.2.0.9000` released - better types in the data frames and `get_` methods to split the fields with multiple entries
 
 ### Installation
 
@@ -22,10 +28,22 @@ devtools::install_github("hrbrmstr/omdbapi")
 
 ``` r
 library(omdbapi)
+library(dplyr)
+#> 
+#> Attaching package: 'dplyr'
+#> 
+#> The following object is masked from 'package:stats':
+#> 
+#>     filter
+#> 
+#> The following objects are masked from 'package:base':
+#> 
+#>     intersect, setdiff, setequal, union
+library(pbapply)
 
 # current verison
 packageVersion("omdbapi")
-#> [1] '0.1.0.9000'
+#> [1] '0.2.0.9000'
 
 search_by_title("Captain America")
 #> Source: local data frame [10 x 4]
@@ -49,17 +67,20 @@ search_by_title("Captain America", year_of_release=2013)
 #> 1 A Look Back at 'Captain America' 2013 tt3307378 movie
 
 games <- search_by_title("Captain America", type="game")
-print(games)
-#> Source: local data frame [2 x 4]
-#> 
-#>                              Title Year    imdbID Type
-#> 1   Captain America: Super Soldier 2011 tt1740721 game
-#> 2 Captain America and the Avengers 1991 tt0421939 game
+glimpse(games)
+#> Observations: 2
+#> Variables:
+#> $ Title  (chr) "Captain America: Super Soldier", "Captain America and the A...
+#> $ Year   (chr) "2011", "1991"
+#> $ imdbID (chr) "tt1740721", "tt0421939"
+#> $ Type   (chr) "game", "game"
 
 find_by_title(games$Title[1])
 #>      Title: Captain America: Super Soldier
 #>       Year: 2011
-#>   Released: 19 Jul 2011
+#>      Rated: N/A
+#>   Released: 2011-07-19
+#>    Runtime: N/A
 #>      Genre: Action
 #>   Director: Michael McCormick, Robert Taylor
 #>     Writer: Christos N. Gage
@@ -68,8 +89,10 @@ find_by_title(games$Title[1])
 #>             minion, Armin Zola's, lair.
 #>   Language: English
 #>    Country: USA
+#>     Awards: N/A
 #>     Poster: http://ia.media-imdb.com/images/M/
 #>             MV5BMTUwMzQ0NjE5N15BMl5BanBnXkFtZTgwODI3MzQxMTE@._V1_SX300.jpg
+#>  Metascore: N/A
 #> imdbRating: 7.2
 #>  imdbVotes: 271
 #>     imdbID: tt1740721
@@ -79,7 +102,7 @@ find_by_title("Game of Thrones", type="series", season=1, episode=1)
 #>      Title: Winter Is Coming
 #>       Year: 2011
 #>      Rated: TV-MA
-#>   Released: 17 Apr 2011
+#>   Released: 2011-04-17
 #>    Runtime: 62 min
 #>      Genre: Adventure, Drama, Fantasy
 #>   Director: Timothy Van Patten
@@ -93,12 +116,46 @@ find_by_title("Game of Thrones", type="series", season=1, episode=1)
 #>             sister to a nomadic warlord in exchange for an army.
 #>   Language: English
 #>    Country: USA
+#>     Awards: N/A
 #>     Poster: http://ia.media-imdb.com/images/M/
 #>             MV5BMTk5MDU3OTkzMF5BMl5BanBnXkFtZTcwOTc0ODg5NA@@._V1_SX300.jpg
+#>  Metascore: N/A
 #> imdbRating: 8.5
 #>  imdbVotes: 12584
 #>     imdbID: tt1480055
 #>       Type: episode
+
+get_genres(find_by_title("Star Trek: Deep Space Nine", season=5, episode=7))
+#> [1] "Action"    "Adventure" "Drama"
+
+get_writers(find_by_title("Star Trek: Deep Space Nine", season=4, episode=6))
+#> [1] "Gene Roddenberry (based upon \"Star Trek\" created by)"
+#> [2] "Rick Berman (created by)"                              
+#> [3] "Michael Piller (created by)"                           
+#> [4] "David Mack"                                            
+#> [5] "John J. Ordover"
+
+get_directors(find_by_id("tt1371111"))
+#> [1] "Tom Tykwer"     "Andy Wachowski" "Lana Wachowski"
+
+get_countries(find_by_title("The Blind Swordsman: Zatoichi"))
+#> [1] "Japan"
+
+ichi <- search_by_title("Zatoichi")
+bind_rows(lapply(ichi$imdbID, function(x) {
+  find_by_id(x, include_tomatoes = TRUE)
+})) -> zato
+
+par(mfrow=c(3,1)) 
+boxplot(zato$tomatoUserMeter, horizontal=TRUE, main="Tomato User Meter", ylim=c(0, 100))
+boxplot(zato$imdbRating, horizontal=TRUE, main="IMDB Rating", ylim=c(0, 10))
+boxplot(zato$tomatoUserRating, horizontal=TRUE, main="Tomato User Rating", ylim=c(0, 5))
+```
+
+![](README-usage-1.png)
+
+``` r
+par(mfrow=c(1,1))
 ```
 
 ### Test Results
@@ -108,7 +165,7 @@ library(omdbapi)
 library(testthat)
 
 date()
-#> [1] "Tue Jun 16 14:25:17 2015"
+#> [1] "Tue Jun 16 22:56:47 2015"
 
 test_dir("tests/")
 #> basic functionality :

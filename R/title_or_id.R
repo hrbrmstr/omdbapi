@@ -47,11 +47,12 @@ find_by_title <- function(title, type=NULL, season=NULL, episode=NULL,
   }
 
   ret <- as_data_frame(tmp)
+  tmp[ tmp == "N/A" ] <- NA
   class(ret) <- c("omdb", class(ret))
-  ret
+
+  suppressWarnings(fix_omdb(ret))
 
 }
-
 
 #' Retrieve OMDB info by IMDB ID search
 #'
@@ -81,12 +82,12 @@ find_by_id <- function(id, type=NULL, year_of_release=NULL,
   }
 
   ret <- as_data_frame(tmp)
+  tmp[ tmp == "N/A" ] <- NA
   class(ret) <- c("omdb", class(ret))
-  ret
+
+  suppressWarnings(fix_omdb(ret))
 
 }
-
-
 
 #' Lightweight omdb title search
 #'
@@ -122,10 +123,13 @@ search_by_title <- function(term, type=NULL, year_of_release=NULL) {
 #'
 #' @param x omdb object
 #' @param \dots ignored
+#' @method print omdb
 #' @export
 print.omdb <- function(x, ...) {
 
-  cols <- setdiff(colnames(x[,which(x[,colnames(x)] != "N/A")]), "Response")
+  x <- as.data.frame(x, stringsAsFactors=FALSE)
+
+  cols <- setdiff(colnames(x[,which(!is.na(x[,colnames(x)]))]), "Response")
 
   # all possible API returns
 
@@ -143,10 +147,19 @@ print.omdb <- function(x, ...) {
 
       cat(str_pad(sprintf("%s: ", col), 2+max(nchar(cols))))
 
-      cat(paste(str_wrap(unlist(x[,col], use.names=FALSE),
-                         width=options("width")$width-10,
-                         exdent=nchar(str_pad(sprintf("%s: ", col), 2+max(nchar(cols))))),
-                collapse="\n"))
+      if (col %in% c("Released", "DVD")) {
+        cat(paste(str_wrap(format(x[,col], "%Y-%m-%d"),
+                           width=options("width")$width-10,
+                           exdent=nchar(str_pad(sprintf("%s: ", col), 2+max(nchar(cols))))),
+                  collapse="\n"))
+
+      } else {
+        cat(paste(str_wrap(x[,col],
+                           width=options("width")$width-10,
+                           exdent=nchar(str_pad(sprintf("%s: ", col), 2+max(nchar(cols))))),
+                  collapse="\n"))
+      }
+
       cat("\n")
 
     }

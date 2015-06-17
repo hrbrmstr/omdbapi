@@ -20,12 +20,18 @@ The following functions are implemented:
 
 - `find_by_id`:	Retrieve OMDB info by IMDB ID search
 - `find_by_title`:	Retrieve OMDB info by title search
+- `get_actors`:	Get actors from an omdb object as a vector
+- `get_countries`:	Get countries from an omdb object as a vector
+- `get_directors`:	Get directors from an omdb object as a vector
+- `get_genres`:	Get genres from an omdb object as a vector
+- `get_writers`:	Get writers from an omdb object as a vector
 - `print.omdb`:	Print an omdb result
 - `search_by_title`:	Lightweight omdb title search
 
 ### News
 
 - Version `0.1.0.9000` released
+- Version `0.2.0.9000` released - better types in the data frames and `get_` methods to split the fields with multiple entries
 
 ### Installation
 
@@ -41,6 +47,8 @@ options(width=80)
 
 ```{r usage}
 library(omdbapi)
+library(dplyr)
+library(pbapply)
 
 # current verison
 packageVersion("omdbapi")
@@ -50,11 +58,31 @@ search_by_title("Captain America")
 search_by_title("Captain America", year_of_release=2013)
 
 games <- search_by_title("Captain America", type="game")
-print(games)
+glimpse(games)
 
 find_by_title(games$Title[1])
 
 find_by_title("Game of Thrones", type="series", season=1, episode=1)
+
+get_genres(find_by_title("Star Trek: Deep Space Nine", season=5, episode=7))
+
+get_writers(find_by_title("Star Trek: Deep Space Nine", season=4, episode=6))
+
+get_directors(find_by_id("tt1371111"))
+
+get_countries(find_by_title("The Blind Swordsman: Zatoichi"))
+
+ichi <- search_by_title("Zatoichi")
+bind_rows(lapply(ichi$imdbID, function(x) {
+  find_by_id(x, include_tomatoes = TRUE)
+})) -> zato
+
+par(mfrow=c(3,1)) 
+boxplot(zato$tomatoUserMeter, horizontal=TRUE, main="Tomato User Meter", ylim=c(0, 100))
+boxplot(zato$imdbRating, horizontal=TRUE, main="IMDB Rating", ylim=c(0, 10))
+boxplot(zato$tomatoUserRating, horizontal=TRUE, main="Tomato User Rating", ylim=c(0, 5))
+par(mfrow=c(1,1))
+
 ```
 
 ### Test Results

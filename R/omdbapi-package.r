@@ -5,4 +5,5 @@
 #' @import httr dplyr
 #' @importFrom stringr str_pad
 #' @importFrom stringr str_wrap
+#' @importFrom stringr str_split
 NULL
