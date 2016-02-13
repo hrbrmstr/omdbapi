@@ -94,14 +94,15 @@ find_by_id <- function(id, type=NULL, year_of_release=NULL,
 #' @param term Movie title to search for.
 #' @param type Type of result to return. One of \code{[movie|series|episode|game]}.
 #' @param year_of_release Year of release.
+#' @param page 1 for first 10 results, 2 for next ten, etc...
 #' @seealso \href{omdbAPI documentation}{http://www.omdbapi.com/}
 #' @return \code{tbl_df}/\code{data.frame} of search results (an empty one if none found)
-#' @note The API's search results limit to 10.
+#' @note The API's search results limit to 10 at a time (see argument page).
 #' @export
-search_by_title <- function(term, type=NULL, year_of_release=NULL) {
+search_by_title <- function(term, type=NULL, year_of_release=NULL, page = 1) {
 
 
-  params <- list(s=term, type=type, y=year_of_release, r="json")
+  params <- list(s=term, type=type, y=year_of_release, page = page, r="json")
   resp <- GET(OMDB_BASE_URL, query=params)
   stop_for_status(resp)
   tmp <- content(resp, as="parsed")
