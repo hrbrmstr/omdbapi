@@ -4,7 +4,7 @@ Version: 0.2.0.9000
 Authors@R: c(person("Bob", "Rudis", email = "bob@rudis.net", role = c("aut", "cre")))
 Description: Provides API access to the 'Open Movie Database' which maintains metadata
              about movies, games and television shows through a public API.
-Depends: R (>= 3.2.0)
+Depends: R (>= 3.1.0)
 License: MIT + file LICENSE
 LazyData: true
 Suggests: testthat
