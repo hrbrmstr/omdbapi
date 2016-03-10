@@ -30,6 +30,7 @@ The following functions are implemented:
 
 ### News
 
+- ibartomeus adds pagination option.
 - Version `0.1.0.9000` released
 - Version `0.2.0.9000` released - better types in the data frames and `get_` methods to split the fields with multiple entries
 
@@ -54,6 +55,8 @@ library(pbapply)
 packageVersion("omdbapi")
 
 search_by_title("Captain America")
+
+search_by_title("Captain America", page = 2)
 
 search_by_title("Captain America", year_of_release=2013)
 
