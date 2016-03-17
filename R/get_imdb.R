@@ -31,11 +31,16 @@ get_tv_data <- function(name) {
   # Starting values
   i <- 1
   j <- 1
+  
+  # Tolerance parameter
+  s <- 0
+  
   # Pull data
   while (!is.null(result)) {
     if (i > 1 & j == 1) {
       break
     }
+    
     # Starting values
     j <- 1
     
@@ -58,9 +63,17 @@ get_tv_data <- function(name) {
       }
       
       # Next season if no more episodes
-      if (is.null(result)) {
+      if (is.null(result) && s == 1) {
         result <- 0
         break
+      }
+      
+      # Skip once, but set tolerance parameter to 1
+      if (is.null(result)) {
+        result <- 0
+        s <- 1
+        j <- j + 1
+        next
       }
       
       # Make episode no higher
@@ -69,10 +82,15 @@ get_tv_data <- function(name) {
       # Fill container
       object[ep.no, ] <- c(i, j, result, ep.no)
       
-      # Next iteration
+      # Next iteration, reset tolerance parameter
       j <- j + 1
+      s <- 0
     }
-    cat(paste("Last episode of Season", i, "was episode", j - 1, "\n"))
+    
+    if (j - 1 != 0)
+      cat(paste("Last episode of Season", i, "was episode", j - 2, "\n"))
+    
+    # Next iteration
     i <- i + 1
   }
   
@@ -84,7 +102,7 @@ get_tv_data <- function(name) {
   for (season in unique(object$Season)) {
     if (all(is.na(object[object$Season == season, "imdbRating"]))) {
       object <- object[object$Season != season, ]
-      cat("Season", season, "was deleted, because all Ratings were NA")
+      warning("Season ", season, " was deleted, because all Ratings were NA \n")
     }
   }
   
