@@ -4,9 +4,9 @@
 #' @param type Type of result to return. One of \code{[movie|series|episode|game]}.
 #' @param year_of_release Year of release.
 #' @param season if \code{type} is \code{series} or \code{episode} then it possible
-#'        to search within a \code{season} AND \code{epispde} (both required)
+#'        to search within a \code{season} AND \code{episode} (both required)
 #' @param episode if \code{type} is \code{series} or \code{episode} then it possible
-#'        to search within a \code{season} AND \code{epispde} (both required)
+#'        to search within a \code{season} AND \code{episode} (both required)
 #' @param plot Return \code{short} or \code{full} plot.
 #' @param include_tomatoes Include Rotten Tomatoes ratings.
 #' @seealso \href{omdbAPI documentation}{http://www.omdbapi.com/}
