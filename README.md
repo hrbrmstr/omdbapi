@@ -1,46 +1,35 @@
----
-output:
-  md_document:
-    variant: markdown_github
----
-
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-
-
-
 omdbapi is an R package wrapper for the [Open Movie Database API](http://www.omdbapi.com/)
 
 The following functions are implemented:
 
-- `find_by_id`:	Retrieve OMDB info by IMDB ID search
-- `find_by_title`:	Retrieve OMDB info by title search
-- `get_actors`:	Get actors from an omdb object as a vector
-- `get_countries`:	Get countries from an omdb object as a vector
-- `get_directors`:	Get directors from an omdb object as a vector
-- `get_genres`:	Get genres from an omdb object as a vector
-- `get_writers`:	Get writers from an omdb object as a vector
-- `print.omdb`:	Print an omdb result
-- `search_by_title`:	Lightweight omdb title search
+-   `find_by_id`: Retrieve OMDB info by IMDB ID search
+-   `find_by_title`: Retrieve OMDB info by title search
+-   `get_tv_data`: Retrieve IMDB ratings for all episodes of a TV series
+-   `get_actors`: Get actors from an omdb object as a vector
+-   `get_countries`: Get countries from an omdb object as a vector
+-   `get_directors`: Get directors from an omdb object as a vector
+-   `get_genres`: Get genres from an omdb object as a vector
+-   `get_writers`: Get writers from an omdb object as a vector
+-   `print.omdb`: Print an omdb result
+-   `search_by_title`: Lightweight omdb title search
 
 ### News
 
-- ibartomeus adds pagination option.
-- Version `0.1.0.9000` released
-- Version `0.2.0.9000` released - better types in the data frames and `get_` methods to split the fields with multiple entries
+-   ibartomeus adds pagination option.
+-   Version `0.1.0.9000` released
+-   Version `0.2.0.9000` released - better types in the data frames and `get_` methods to split the fields with multiple entries
+-   Stan125 adds function to obtain IMDB ratings for a TV series
 
 ### Installation
 
-
-```r
+``` r
 devtools::install_github("hrbrmstr/omdbapi")
 ```
 
-
-
 ### Usage
 
-
-```r
+``` r
 library(omdbapi)
 library(dplyr)
 #> 
@@ -52,7 +41,7 @@ library(dplyr)
 #> 
 #>     intersect, setdiff, setequal, union
 library(pbapply)
-#> Error in library(pbapply): there is no package called 'pbapply'
+#> Warning: package 'pbapply' was built under R version 3.2.4
 
 # current verison
 packageVersion("omdbapi")
@@ -80,8 +69,8 @@ search_by_title("Captain America", page = 2)
 #> 
 #>                                                                Title  Year
 #>                                                                (chr) (chr)
-#> 1                                   Captain America and the Avengers  1991
-#> 2                          Marvel's Captain America: 75 Heroic Years  2016
+#> 1                          Marvel's Captain America: 75 Heroic Years  2016
+#> 2                                   Captain America and the Avengers  1991
 #> 3                                   A Look Back at 'Captain America'  2013
 #> 4                          Captain America XXX: An Axel Braun Parody  2014
 #> 5                     Captain America XXX: An Extreme Comixxx Parody  2011
@@ -154,9 +143,30 @@ find_by_title("Game of Thrones", type="series", season=1, episode=1)
 #>             MV5BMTk5MDU3OTkzMF5BMl5BanBnXkFtZTcwOTc0ODg5NA@@._V1_SX300.jpg
 #>  Metascore: N/A
 #> imdbRating: 8.9
-#>  imdbVotes: 13914
+#>  imdbVotes: 14119
 #>     imdbID: tt1480055
 #>       Type: episode
+
+get_tv_data("True Detective")
+#> Last episode of Season 1 was episode 8 
+#> Last episode of Season 2 was episode 8
+#>    Season Episode imdbRating episode.no
+#> 1       1       1        9.0          1
+#> 2       1       2        8.9          2
+#> 3       1       3        9.2          3
+#> 4       1       4        9.7          4
+#> 5       1       5        9.6          5
+#> 6       1       6        9.1          6
+#> 7       1       7        9.2          7
+#> 8       1       8        9.5          8
+#> 9       2       1        8.0          9
+#> 10      2       2        8.1         10
+#> 11      2       3        7.7         11
+#> 12      2       4        8.5         12
+#> 13      2       5        8.1         13
+#> 14      2       6        8.7         14
+#> 15      2       7        9.1         15
+#> 16      2       8        8.4         16
 
 get_genres(find_by_title("Star Trek: Deep Space Nine", season=5, episode=7))
 #> [1] "Action"    "Adventure" "Drama"
@@ -169,7 +179,7 @@ get_writers(find_by_title("Star Trek: Deep Space Nine", season=4, episode=6))
 #> [5] "John J. Ordover"
 
 get_directors(find_by_id("tt1371111"))
-#> [1] "Tom Tykwer"     "Andy Wachowski" "Lana Wachowski"
+#> [1] "Tom Tykwer"      "Lana Wachowski"  "Lilly Wachowski"
 
 get_countries(find_by_title("The Blind Swordsman: Zatoichi"))
 #> [1] "Japan"
@@ -185,21 +195,20 @@ boxplot(zato$imdbRating, horizontal=TRUE, main="IMDB Rating", ylim=c(0, 10))
 boxplot(zato$tomatoUserRating, horizontal=TRUE, main="Tomato User Rating", ylim=c(0, 5))
 ```
 
-![plot of chunk usage](README-usage-1.png)
+![](README-usage-1.png)<!-- -->
 
-```r
+``` r
 par(mfrow=c(1,1))
 ```
 
 ### Test Results
 
-
-```r
+``` r
 library(omdbapi)
 library(testthat)
 
 date()
-#> [1] "Sat Feb 13 21:47:32 2016"
+#> [1] "Thu Mar 17 14:27:05 2016"
 
 test_dir("tests/")
 #> testthat results ================================================================
@@ -208,5 +217,4 @@ test_dir("tests/")
 
 ### Code of Conduct
 
-Please note that this project is released with a [Contributor Code of Conduct](CONDUCT.md). 
-By participating in this project you agree to abide by its terms.
+Please note that this project is released with a [Contributor Code of Conduct](CONDUCT.md). By participating in this project you agree to abide by its terms.
