@@ -13,7 +13,7 @@ get_tv_data(name)
 \code{data.frame}
 }
 \description{
-Retrieve IMDB ratings for all Episodes of a TV series
+Retrieve IMDB ratings for all Episodes of a TV series.
 }
 \note{
 Can be quite slow, depending on your internet connection.

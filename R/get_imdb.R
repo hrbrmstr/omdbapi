@@ -49,8 +49,8 @@ get_tv_data <- function(name) {
       query <- GET("http://www.omdbapi.com/", 
                    query = list(t = name, 
                                 Season = i,
-                                Episode = j),
-                   r = "json")
+                                Episode = j,
+                                r = "json"))
       
       # Parse content
       query_parsed <- content(query, as = "parsed")
