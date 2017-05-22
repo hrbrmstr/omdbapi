@@ -1,13 +1,12 @@
 Package: omdbapi
 Title: Tools to Access Movie, Television and Game Data from the 'Open Movie Database'
-Version: 0.2.0.9000
-Authors@R: c(person("Bob", "Rudis", email = "bob@rudis.net", role = c("aut", "cre")))
+Version: 0.3.0
+Authors@R: c(person("Bob", "Rudis", email = "bob@rud.is", role = c("aut", "cre")))
 Description: Provides API access to the 'Open Movie Database' which maintains metadata
              about movies, games and television shows through a public API.
 Depends: R (>= 3.1.0)
 License: MIT + file LICENSE
 LazyData: true
 Suggests: testthat
-Imports: httr,
-         dplyr,
-         stringr
+Imports: httr, dplyr, stringr
+RoxygenNote: 6.0.1

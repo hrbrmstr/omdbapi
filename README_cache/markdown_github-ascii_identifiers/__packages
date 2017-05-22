@@ -1,0 +1,9 @@
+base
+omdbapi
+dplyr
+tidyverse
+ggplot2
+tibble
+tidyr
+readr
+purrr

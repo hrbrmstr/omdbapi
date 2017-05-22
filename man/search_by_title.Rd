@@ -4,7 +4,8 @@
 \alias{search_by_title}
 \title{Lightweight omdb title search}
 \usage{
-search_by_title(term, type = NULL, year_of_release = NULL, page = 1)
+search_by_title(term, type = NULL, year_of_release = NULL, page = 1,
+  api_key = omdb_api_key())
 }
 \arguments{
 \item{term}{Movie title to search for.}
@@ -14,6 +15,8 @@ search_by_title(term, type = NULL, year_of_release = NULL, page = 1)
 \item{year_of_release}{Year of release.}
 
 \item{page}{1 for first 10 results, 2 for next ten, etc...}
+
+\item{api_key}{OMDB API key. See \code{\link[=omdb_api_key]{omdb_api_key()}} & \url{https://www.patreon.com/bePatron?u=5038490} for more information.}
 }
 \value{
 \code{tbl_df}/\code{data.frame} of search results (an empty one if none found)
@@ -27,4 +30,3 @@ The API's search results limit to 10 at a time (see argument page).
 \seealso{
 \href{omdbAPI documentation}{http://www.omdbapi.com/}
 }
-

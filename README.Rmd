@@ -1,20 +1,25 @@
 ---
-output:
-  md_document:
-    variant: markdown_github
+output: rmarkdown::github_document
+editor_options: 
+  chunk_output_type: console
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 ```{r setup, echo=FALSE}
 knitr::opts_chunk$set(
+  message = FALSE,
+  warning = FALSE,
+  fig.retina = 2,
   collapse = TRUE,
   comment = "#>",
   fig.path = "README-"
 )
 ```
 
-omdbapi is an R package wrapper for the [Open Movie Database API](http://www.omdbapi.com/)
+omdbapi is an R package wrapper for the [Open Movie Database API](https://www.omdbapi.com/)
+
+NOTE: THE OMDB API NOW REQUIRES AN API KEY <https://www.patreon.com/posts/api-is-going-10743518>
 
 The following functions are implemented:
 
@@ -26,10 +31,11 @@ The following functions are implemented:
 - `get_genres`:	Get genres from an omdb object as a vector
 - `get_writers`:	Get writers from an omdb object as a vector
 - `print.omdb`:	Print an omdb result
-- `search_by_title`:	Lightweight omdb title search
+- `search_by_title`:	Lightweight OMDB title search
 
 ### News
 
+- Version `0.3.0` released (API key support & https URL switch)
 - ibartomeus adds pagination option.
 - Version `0.1.0.9000` released
 - Version `0.2.0.9000` released - better types in the data frames and `get_` methods to split the fields with multiple entries
@@ -48,15 +54,14 @@ options(width=80)
 
 ```{r usage}
 library(omdbapi)
-library(dplyr)
-library(pbapply)
+library(tidyverse)
 
 # current verison
 packageVersion("omdbapi")
 
 search_by_title("Captain America")
 
-search_by_title("Captain America", page = 2)
+search_by_title("Star Wars", page = 2)
 
 search_by_title("Captain America", year_of_release=2013)
 
@@ -74,18 +79,23 @@ get_writers(find_by_title("Star Trek: Deep Space Nine", season=4, episode=6))
 get_directors(find_by_id("tt1371111"))
 
 get_countries(find_by_title("The Blind Swordsman: Zatoichi"))
+```
 
+```{r cache=TRUE}
 ichi <- search_by_title("Zatoichi")
-bind_rows(lapply(ichi$imdbID, function(x) {
-  find_by_id(x, include_tomatoes = TRUE)
-})) -> zato
+pb <- progress_estimated(length(ichi$imdbID))
+zato <- purrr::map_df(ichi$imdbID, find_by_id)
 
-par(mfrow=c(3,1)) 
-boxplot(zato$tomatoUserMeter, horizontal=TRUE, main="Tomato User Meter", ylim=c(0, 100))
-boxplot(zato$imdbRating, horizontal=TRUE, main="IMDB Rating", ylim=c(0, 10))
-boxplot(zato$tomatoUserRating, horizontal=TRUE, main="Tomato User Rating", ylim=c(0, 5))
-par(mfrow=c(1,1))
+zato
+```
 
+```{r fig.width=10, fig.height=2.5}
+ggplot(zato, aes(x="IMDB Rating", imdbRating)) + 
+  geom_boxplot() +
+  scale_y_continuous(limits=c(0,10)) +
+  coord_flip() +
+  labs(x=NULL, y=NULL, title="Distribution of IMDB Ratings for Zatoichi movies") +
+  hrbrthemes::theme_ipsum_rc(grid="X")
 ```
 
 ### Test Results
