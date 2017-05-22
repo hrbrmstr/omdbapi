@@ -30,7 +30,6 @@ The following functions are implemented:
 - `get_directors`:	Get directors from an omdb object as a vector
 - `get_genres`:	Get genres from an omdb object as a vector
 - `get_writers`:	Get writers from an omdb object as a vector
-- `print.omdb`:	Print an omdb result
 - `search_by_title`:	Lightweight OMDB title search
 
 ### News

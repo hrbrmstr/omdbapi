@@ -13,7 +13,6 @@ The following functions are implemented:
 -   `get_directors`: Get directors from an omdb object as a vector
 -   `get_genres`: Get genres from an omdb object as a vector
 -   `get_writers`: Get writers from an omdb object as a vector
--   `print.omdb`: Print an omdb result
 -   `search_by_title`: Lightweight OMDB title search
 
 ### News
@@ -190,7 +189,7 @@ library(omdbapi)
 library(testthat)
 
 date()
-#> [1] "Mon May 22 06:52:06 2017"
+#> [1] "Mon May 22 07:10:42 2017"
 
 test_dir("tests/")
 #> testthat results ================================================================
